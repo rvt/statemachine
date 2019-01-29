@@ -13,9 +13,9 @@ TEST_CASE( "Should correctly get current value with simple state machine", "[sta
     State* thirdState;
     State* secondState;
     State* firstState;
-    thirdState = new State([&thirdState](){std::cerr << "thirdState\n";return thirdState;});
-    secondState = new State([&thirdState](){std::cerr << "secondState\n";return thirdState;});
-    firstState = new State([&secondState](){std::cerr << "firstState\n";return secondState;});
+    thirdState = new State([](){std::cerr << "thirdState\n";return 2;});
+    secondState = new State([](){std::cerr << "secondState\n";return 2;});
+    firstState = new State([](){std::cerr << "firstState\n";return 1;});
 
     StateMachine machine({firstState, secondState, thirdState} );
     machine.start();
@@ -45,3 +45,7 @@ it´s used to connect to wifi and Mosquitto. It will detected if the connection 
 ## License
 
 This code is released under the MIT License.
+
+
+## V 1.0.1
+* Each state should return a state number instead of this

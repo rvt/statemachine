@@ -17,7 +17,7 @@ uint16_t State::id() const {
     return m_id;
 }
 
-const State* State::run(const uint32_t currentMillis) const {
+uint8_t State::run(const uint32_t currentMillis) const {
     return m_run();
 }
 
@@ -32,14 +32,14 @@ void StateTimed::transitionStart(const uint32_t p_currentTime) const {
     m_startTime = p_currentTime;
 }
 
-const State* StateTimed::run(const uint32_t p_currentTime) const {
+uint8_t StateTimed::run(const uint32_t p_currentTime) const {
     if (p_currentTime - m_startTime > m_forTime) {
         // We reset the time in case we re-run this state again
         m_startTime = p_currentTime;
         return State::run(p_currentTime);
     }
 
-    return this;
+    return UINT8_MAX;
 }
 
 
@@ -66,20 +66,14 @@ bool StateMachine::current(const State* state) const {
 
 void StateMachine::handle() {
     const uint32_t currentMillis = millis();
-    const State* newState = m_states[m_pos]->run(currentMillis);
+    uint8_t newState = m_states[m_pos]->run(currentMillis);
 
     // Test if we need to change state
-    if (*m_states[m_pos] != *newState) {
-        // If so, lookup it´s position in our state array
-        for (uint16_t i = 0; i < m_states.size(); i++) {
-            if (*newState == *m_states[i]) {
-                // When state isfound end the previous state and start the new state
-                m_states[m_pos]->transitionEnd(currentMillis);
-                m_pos = i;
-                m_states[m_pos]->transitionStart(currentMillis);
-                break;
-            }
-        }
+    if (m_pos != newState && newState>=0 && newState<m_states.size()) {
+        // When state isfound end the previous state and start the new state
+        m_states[m_pos]->transitionEnd(currentMillis);
+        m_pos = newState;
+        m_states[m_pos]->transitionStart(currentMillis);
     }
 }
 

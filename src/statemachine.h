@@ -9,7 +9,7 @@
 class State {
     friend class StateMachine;
 public:
-    typedef std::function<const State* (void)> TValueFunction;
+    typedef std::function<uint8_t (void)> TValueFunction;
 
 private:
     static uint16_t m_oCounter;
@@ -24,7 +24,7 @@ protected:
 
     virtual void transitionStart(const uint32_t p_currentTime) const {}
     virtual void transitionEnd(const uint32_t p_currentTime) const {}
-    virtual const State* run(const uint32_t currentMillis) const;
+    virtual uint8_t run(const uint32_t currentMillis) const;
 
 public:
     State(const TValueFunction p_run);
@@ -51,7 +51,7 @@ public:
 
 private:
     virtual void transitionStart(const uint32_t p_currentTime) const;
-    virtual const State* run(const uint32_t p_currentTime) const;
+    virtual uint8_t run(const uint32_t p_currentTime) const;
 };
 
 

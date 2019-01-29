@@ -8,9 +8,9 @@ TEST_CASE( "Should correctly get current value with simple state machine", "[sta
     State* thirdState;
     State* secondState;
     State* firstState;
-    thirdState = new State([&thirdState](){std::cerr << "thirdState\n";return thirdState;});
-    secondState = new State([&thirdState](){std::cerr << "secondState\n";return thirdState;});
-    firstState = new State([&secondState](){std::cerr << "firstState\n";return secondState;});
+    thirdState = new State([](){std::cerr << "thirdState\n";return 2;});
+    secondState = new State([](){std::cerr << "secondState\n";return 2;});
+    firstState = new State([](){std::cerr << "firstState\n";return 1;});
 
     StateMachine machine({firstState, secondState, thirdState} );
     machine.start();
@@ -36,9 +36,9 @@ TEST_CASE( "Should handle timed states", "[statemachine]" ) {
     State* thirdState;
     State* secondState;
     State* firstState;
-    thirdState = new State([&thirdState](){std::cerr << "thirdState\n";return thirdState;});
-    secondState = new StateTimed(10, [&thirdState](){std::cerr << "secondState\n";return thirdState;});
-    firstState = new State([&secondState](){std::cerr << "firstState\n";return secondState;});
+    thirdState = new State([](){std::cerr << "thirdState\n";return 2;});
+    secondState = new StateTimed(10, [](){std::cerr << "secondState\n";return 2;});
+    firstState = new State([](){std::cerr << "firstState\n";return 1;});
 
     StateMachine machine({firstState, secondState, thirdState} );
     machine.start();
