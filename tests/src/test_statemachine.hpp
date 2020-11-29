@@ -11,49 +11,47 @@ std::unique_ptr<T> make_unique(Args&& ... args) {
 
 TEST_CASE("Should correctly get current value with simple state machine", "[statemachine]") {
     auto firstState = new State;
-    auto unusedState0 = new State;
     auto secondState = new State;
-    auto unusedState1 = new State;
     auto thirdState = new State;
 
     auto run1 = [secondState]() {
         std::cerr << "firstState\n";
-        return secondState->id();
+        return secondState;
     };
     auto run2 = [thirdState]() {
         std::cerr << "secondState\n";
-        return thirdState->id();
+        return thirdState;
     };
     auto run3 = [thirdState]() {
         std::cerr << "thirdState\n";
-        return thirdState->id();
+        return thirdState;
     };
 
     firstState->setRunnable(run1);
     secondState->setRunnable(run2);
     thirdState->setRunnable(run3);
 
-    StateMachine<3> machine {{firstState, secondState, thirdState} };
+    StateMachine machine {firstState };
     machine.start();
 
     // Should initially be at the first state
-    REQUIRE(machine.current(firstState->id()) == true);
+    REQUIRE(machine.current(firstState) == true);
 
     // then second state
     machine.handle();
-    REQUIRE(machine.current(secondState->id()) == true);
+    REQUIRE(machine.current(secondState) == true);
 
     // then third state
     machine.handle();
-    REQUIRE(machine.current(thirdState->id()) == true);
+    REQUIRE(machine.current(thirdState) == true);
 
     // well advance and should always end in last state
     machine.handle();
-    REQUIRE(machine.current(thirdState->id()) == true);
-    REQUIRE(machine.current(secondState->id()) == false);
+    REQUIRE(machine.current(thirdState) == true);
+    REQUIRE(machine.current(secondState) == false);
     // Third state still active
     machine.handle();
-    REQUIRE(machine.current(thirdState->id()) == true);
+    REQUIRE(machine.current(thirdState) == true);
 }
 
 TEST_CASE("Should handle timed states", "[statemachine]") {
@@ -61,41 +59,38 @@ TEST_CASE("Should handle timed states", "[statemachine]") {
     auto secondState = new StateTimed{10};
     auto thirdState = new State;
 
-    auto firstStateId = firstState->id();
-    auto secondStateId = secondState->id();
-    auto thirdStateId = thirdState->id();
-    auto run1 = [secondStateId]() {
+    auto run1 = [secondState]() {
         std::cerr << "firstState\n";
-        return secondStateId;
+        return secondState;
     };
-    auto run2 = [thirdStateId]() {
+    auto run2 = [thirdState]() {
         std::cerr << "secondState\n";
-        return thirdStateId;
+        return thirdState;
     };
-    auto run3 = [thirdStateId]() {
+    auto run3 = [thirdState]() {
         std::cerr << "thirdState\n";
-        return thirdStateId;
+        return thirdState;
     };
 
     firstState->setRunnable(run1);
     secondState->setRunnable(run2);
     thirdState->setRunnable(run3);
 
-    StateMachine<3> machine {{firstState, secondState, thirdState} };
+    StateMachine machine {firstState };
     machine.start();
     // Should initially be at the first state
-    REQUIRE(machine.current(firstState->id()) == true);
+    REQUIRE(machine.current(firstState) == true);
 
     // then second state
     machine.handle();
-    REQUIRE(machine.current(secondState->id()) == true);
+    REQUIRE(machine.current(secondState) == true);
 
     // Still at second state
     machine.handle();
-    REQUIRE(machine.current(secondState->id()) == true);
+    REQUIRE(machine.current(secondState) == true);
 
     // should have been advanced to third state
     millisStubbed = 11;
     machine.handle();
-    REQUIRE(machine.current(thirdState->id()) == true);
+    REQUIRE(machine.current(thirdState) == true);
 }
