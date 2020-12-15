@@ -1,6 +1,7 @@
 #pragma once
 #include <stdint.h>
 #include <functional>
+#include <vector>
 
 #ifndef UNIT_TEST
 #include <Arduino.h>
@@ -77,3 +78,11 @@ public:
 
 };
 
+class DeletingStateMachine :public StateMachine{
+private:
+    const std::vector<State*> m_states;
+public:
+    DeletingStateMachine(State* p_first, const std::vector<State*>& m_states);
+
+    virtual ~DeletingStateMachine();
+};

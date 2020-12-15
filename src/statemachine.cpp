@@ -70,3 +70,15 @@ void StateMachine::handle() {
         m_currentState->transitionStart(currentMillis);
     }
 }
+
+DeletingStateMachine::DeletingStateMachine(State* p_first, const std::vector<State*>& p_states) : 
+  StateMachine(p_first),
+  m_states(p_states) {
+    
+}
+
+DeletingStateMachine::~DeletingStateMachine() {
+    for (State* s : m_states) {
+        delete s;
+    }
+}
