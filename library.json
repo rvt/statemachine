@@ -1,0 +1,20 @@
+{
+  "name":"rvt-StateMachine",
+  "keywords":"fsm, StateMachine, iot, finite-state-machine",
+  "description":"Small statemachine using Lambda's, yes... Another statemachine",
+  "repository":{
+     "type":"git",
+     "url":"https://github.com/rvt/statemachine"
+  },
+  "version":"1.0.0",
+  "authors":[
+     {
+        "name":"R. van Twisk",
+        "email":"github@rvt.dds.nl",
+        "url":"https://github.com/rvt/",
+        "maintainer":true
+     }
+  ],
+  "frameworks":"arduino",
+  "platforms":"*"
+}

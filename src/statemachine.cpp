@@ -1,4 +1,4 @@
-#include "statemachine.h"
+#include "statemachine.hpp"
 
 #ifndef UNIT_TEST
 #include <Arduino.h>

@@ -1,6 +1,6 @@
 #include <catch2/catch.hpp>
 
-#include <statemachine.h>
+#include <statemachine.hpp>
 #include <iostream>
 #include "arduinostubs.hpp"
 
